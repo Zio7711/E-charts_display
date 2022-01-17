@@ -1,17 +1,16 @@
 <template>
   <div class="com-page">
-    <!-- <seller></seller> -->
-    <div>Seller Page</div>
+    <seller></seller>
   </div>
 </template>
 
 <script>
-// import Seller from "components/report/Seller";
+import Seller from "../components/report/Seller.vue";
 export default {
   // Seller 商家销量
   name: "SellerPage",
   components: {
-    // seller: Seller,
+    seller: Seller,
   },
 };
 </script>
