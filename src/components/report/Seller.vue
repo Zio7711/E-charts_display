@@ -19,6 +19,14 @@ export default {
   methods: {
     initChart() {
       this.chartInstance = this.$echarts.init(this.$refs.sellerRef);
+
+      this.chartInstance.on("mouseover", () => {
+        clearInterval(this.timerId);
+      });
+
+      this.chartInstance.on("mouseout", () => {
+        this.startInterVal();
+      });
     },
 
     async getData() {
