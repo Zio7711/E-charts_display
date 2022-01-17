@@ -18,7 +18,10 @@ export default {
   },
   methods: {
     initChart() {
-      this.chartInstance = this.$echarts.init(this.$refs.sellerRef);
+      this.chartInstance = this.$echarts.init(
+        this.$refs.sellerRef,
+        "purple-passion"
+      );
 
       this.chartInstance.on("mouseover", () => {
         clearInterval(this.timerId);
