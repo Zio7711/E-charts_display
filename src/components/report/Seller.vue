@@ -78,10 +78,44 @@ export default {
           type: "category",
           data: sellerNames,
         },
+
+        tooltip: {
+          trigger: "axis",
+          axisPointer: {
+            type: "line",
+            z: 0,
+            lineStyle: {
+              width: 66,
+              color: "#2D3443",
+            },
+          },
+        },
         series: [
           {
             type: "bar",
             data: sellerValues,
+            barWidth: 66,
+            label: {
+              show: true,
+              position: "right",
+              textStyle: {
+                color: "white",
+              },
+            },
+
+            itemStyle: {
+              barBorderRadius: [0, 33, 33, 0],
+              color: new this.$echarts.graphic.LinearGradient(0, 0, 1, 0, [
+                {
+                  offset: 0,
+                  color: "#5052EE",
+                },
+                {
+                  offset: 1,
+                  color: "#AB6EE5",
+                },
+              ]),
+            },
           },
         ],
       };
