@@ -144,11 +144,42 @@ export default {
         this.updateChart();
       }, 3000);
     },
+
+    screenAdapter() {
+      const titleFontSize = (this.$refs.sellerRef.offsetWidth / 100) * 3.6;
+
+      const adapterOption = {
+        title: {
+          textStyle: {
+            fontSize: titleFontSize,
+          },
+        },
+        tooltip: {
+          axisPointer: {
+            lineStyle: {
+              width: titleFontSize,
+            },
+          },
+        },
+        series: [
+          {
+            barWidth: titleFontSize,
+            itemStyle: {
+              barBorderRadius: [0, titleFontSize / 2, titleFontSize / 2, 0],
+            },
+          },
+        ],
+      };
+      this.chartInstance.setOption(adapterOption);
+      this.chartInstance.resize();
+    },
   },
 
   mounted() {
     this.initChart();
     this.getData();
+
+    window.addEventListener("resize", this.screenAdapter);
   },
 
   beforeDestroy() {
