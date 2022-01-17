@@ -11,6 +11,9 @@ export default {
     return {
       chartInstance: null,
       allData: null,
+      currentPage: 1,
+      totalPage: 0,
+      timerId: null, // time interval
     };
   },
   methods: {
@@ -21,16 +24,24 @@ export default {
     async getData() {
       const { data: ret } = await this.$http.get("seller");
       this.allData = ret;
+
+      //sort all data and separate them in to different page
+      this.allData.sort((a, b) => b.value - a.value);
+      this.totalPage = Math.ceil(this.allData.length / 5);
+
       this.updateChart();
+      this.startInterVal();
     },
 
     updateChart() {
-      // y轴上的数据
-      const sellerNames = this.allData.map((item) => item.name);
-      // x 轴上的数据
-      const sellerValues = this.allData.map((item) => item.value);
+      //分页展示数据
+      const start = (this.currentPage - 1) * 5;
+      const end = this.currentPage * 5;
+      const showData = this.allData.slice(start, end);
 
-      // 当拿到数据后，准备数据的配置项
+      const sellerNames = showData.map((item) => item.name);
+      const sellerValues = showData.map((item) => item.value);
+
       const dataOption = {
         xAxis: {
           type: "value",
@@ -50,11 +61,24 @@ export default {
       // 设置数据
       this.chartInstance.setOption(dataOption);
     },
+
+    startInterVal() {
+      this.timerId && clearInterval(this.timerId);
+      this.timerId = setInterval(() => {
+        this.currentPage++;
+        if (this.currentPage > this.totalPage) this.currentPage = 1;
+        this.updateChart();
+      }, 3000);
+    },
   },
 
   mounted() {
     this.initChart();
     this.getData();
+  },
+
+  beforeDestroy() {
+    clearInterval(this.timeId);
   },
 };
 </script>
