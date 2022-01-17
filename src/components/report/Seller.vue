@@ -23,6 +23,73 @@ export default {
         "purple-passion"
       );
 
+      const initOption = {
+        title: {
+          text: "▎商家销售统计",
+          left: 20,
+          top: 20,
+          textStyle: {
+            fontSize: 50,
+          },
+        },
+
+        grid: {
+          top: "20%",
+          left: "3%",
+          right: "6%",
+          bottom: "3%",
+          // 默认grid不包含坐标轴文字，改为true
+          containLabel: true,
+        },
+        xAxis: {
+          type: "value",
+        },
+        yAxis: {
+          type: "category",
+        },
+
+        tooltip: {
+          trigger: "axis",
+          axisPointer: {
+            type: "line",
+            z: 0,
+            lineStyle: {
+              width: 66,
+              color: "#2D3443",
+            },
+          },
+        },
+        series: [
+          {
+            type: "bar",
+            barWidth: 66,
+            label: {
+              show: true,
+              position: "right",
+              textStyle: {
+                color: "white",
+              },
+            },
+
+            itemStyle: {
+              barBorderRadius: [0, 33, 33, 0],
+              color: new this.$echarts.graphic.LinearGradient(0, 0, 1, 0, [
+                {
+                  offset: 0,
+                  color: "#5052EE",
+                },
+                {
+                  offset: 1,
+                  color: "#AB6EE5",
+                },
+              ]),
+            },
+          },
+        ],
+      };
+
+      this.chartInstance.setOption(initOption);
+
       this.chartInstance.on("mouseover", () => {
         clearInterval(this.timerId);
       });
@@ -54,68 +121,13 @@ export default {
       const sellerValues = showData.map((item) => item.value);
 
       const dataOption = {
-        title: {
-          text: "▎商家销售统计",
-          left: 20,
-          top: 20,
-          textStyle: {
-            fontSize: 50,
-          },
-        },
-
-        grid: {
-          top: "20%",
-          left: "3%",
-          right: "6%",
-          bottom: "3%",
-          // 默认grid不包含坐标轴文字，改为true
-          containLabel: true,
-        },
-        xAxis: {
-          type: "value",
-        },
         yAxis: {
-          type: "category",
           data: sellerNames,
         },
 
-        tooltip: {
-          trigger: "axis",
-          axisPointer: {
-            type: "line",
-            z: 0,
-            lineStyle: {
-              width: 66,
-              color: "#2D3443",
-            },
-          },
-        },
         series: [
           {
-            type: "bar",
             data: sellerValues,
-            barWidth: 66,
-            label: {
-              show: true,
-              position: "right",
-              textStyle: {
-                color: "white",
-              },
-            },
-
-            itemStyle: {
-              barBorderRadius: [0, 33, 33, 0],
-              color: new this.$echarts.graphic.LinearGradient(0, 0, 1, 0, [
-                {
-                  offset: 0,
-                  color: "#5052EE",
-                },
-                {
-                  offset: 1,
-                  color: "#AB6EE5",
-                },
-              ]),
-            },
           },
         ],
       };
