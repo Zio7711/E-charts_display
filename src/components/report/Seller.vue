@@ -54,6 +54,23 @@ export default {
       const sellerValues = showData.map((item) => item.value);
 
       const dataOption = {
+        title: {
+          text: "▎商家销售统计",
+          left: 20,
+          top: 20,
+          textStyle: {
+            fontSize: 50,
+          },
+        },
+
+        grid: {
+          top: "20%",
+          left: "3%",
+          right: "6%",
+          bottom: "3%",
+          // 默认grid不包含坐标轴文字，改为true
+          containLabel: true,
+        },
         xAxis: {
           type: "value",
         },
