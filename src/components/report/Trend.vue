@@ -1,10 +1,12 @@
 <template>
   <div class="com-container">
     <div class="title" @click="showMenu = !showMenu" :style="comStyle">
-      <span class="before-icon">▎</span>
-      <span>{{ showTitle }}</span>
+      <div class="title-container">
+        <span class="before-icon">▎ </span>
+        <span>{{ showTitle }}</span>
+        <span class="iconfont title-icon" :style="comStyle">&#xe6eb;</span>
+      </div>
 
-      <span class="iconfont title-icon" :style="comStyle">&#xe6eb;</span>
       <div class="select-con" v-show="showMenu">
         <div
           class="select-item"
@@ -50,6 +52,7 @@ export default {
     comStyle() {
       return {
         fontSize: this.titleFontSize + "px",
+        paddingLeft: this.titleFontSize / 3 + "px",
       };
     },
   },
@@ -81,7 +84,7 @@ export default {
         },
 
         legend: {
-          left: "center",
+          right: "5%",
           top: "18%",
           icon: "circle",
         },
@@ -162,7 +165,7 @@ export default {
           // 间距
           itemGap: this.titleFontSize,
           textStyle: {
-            fontSize: this.titleFontSize / 1.3,
+            fontSize: this.titleFontSize / 2,
           },
         },
       };
@@ -204,6 +207,12 @@ export default {
   }
   .title-icon {
     margin-left: 10px;
+    transform: rotate(0deg);
+  }
+
+  .title-container {
+    display: flex;
+    align-items: center;
   }
 }
 </style>
