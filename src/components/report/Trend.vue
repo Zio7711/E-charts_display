@@ -25,19 +25,42 @@ export default {
         this.$refs.trendRef,
         "purple-passion"
       );
-      const initOption = {};
+      const initOption = {
+        xAxis: {
+          type: "category",
+        },
+        yAxis: {
+          type: "value",
+        },
+      };
       this.chartInstance.setOption(initOption);
     },
 
     async getData() {
-      const { data: res } = await this.$http.get("/api/trend");
+      const { data: res } = await this.$http.get("trend");
       this.allData = res;
 
       this.updateChart();
     },
 
     updateChart() {
-      const dataOption = {};
+      const timeArr = this.allData.common.month;
+      const valueArr = this.allData.map.data;
+      const seriesArr = valueArr.map((item, index) => {
+        return {
+          name: item.name,
+          type: "line",
+          data: item.data,
+          stack: "map",
+        };
+      });
+
+      const dataOption = {
+        xAxis: {
+          data: timeArr,
+        },
+        series: seriesArr,
+      };
       this.chartInstance.setOption(dataOption);
     },
 
