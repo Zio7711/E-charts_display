@@ -38,7 +38,9 @@ export default {
 
   computed: {
     selectTypes() {
-      return this.allData ? this.allData.type : [];
+      return this.allData
+        ? this.allData.type.filter((item) => item.key !== this.activeName)
+        : [];
     },
 
     showTitle() {
