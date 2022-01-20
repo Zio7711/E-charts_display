@@ -34,14 +34,37 @@ export default {
     },
 
     async getData() {
-      const { data: res } = await this.$http.get("/api/trend");
+      const { data: res } = await this.$http.get("map");
       this.allData = res;
 
       this.updateChart();
     },
 
     updateChart() {
-      const dataOption = {};
+      const legendArr = this.allData.map((item) => {
+        return item.name;
+      });
+      const seriesArr = this.allData.map((item) => {
+        return {
+          type: "effectScatter",
+          name: item.name,
+          data: item.children,
+          coordinateSystem: "geo",
+          rippleEffect: {
+            scale: 10,
+            brushType: "stroke",
+          },
+        };
+      });
+      const dataOption = {
+        legend: {
+          left: "2%",
+          bottom: "5%",
+          orient: "vertical",
+          data: legendArr.reverse(),
+        },
+        series: seriesArr,
+      };
       this.chartInstance.setOption(dataOption);
     },
 
