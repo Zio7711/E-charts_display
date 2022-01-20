@@ -25,9 +25,22 @@ export default {
       );
       this.$echarts.registerMap("china", chinaMap);
       const initOption = {
+        title: {
+          text: "▎商家分布",
+          left: 20,
+          top: 20,
+        },
         geo: {
           type: "map",
           map: "china",
+          top: "5%",
+          bottom: "-30%",
+          roam: true,
+
+          itemStyle: {
+            areaColor: "#2E72BF",
+            borderColor: "#333",
+          },
         },
       };
       this.chartInstance.setOption(initOption);
