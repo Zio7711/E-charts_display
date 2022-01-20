@@ -5,6 +5,7 @@
 </template>
 
 <script>
+import chinaMap from "../../../public/map/china.json";
 export default {
   name: "Map",
 
@@ -22,7 +23,13 @@ export default {
         this.$refs.trendRef,
         "purple-passion"
       );
-      const initOption = {};
+      this.$echarts.registerMap("china", chinaMap);
+      const initOption = {
+        geo: {
+          type: "map",
+          map: "china",
+        },
+      };
       this.chartInstance.setOption(initOption);
     },
 
