@@ -1,7 +1,18 @@
-<template></template>
+<template>
+  <div class="com-page">
+    <trend></trend>
+  </div>
+</template>
 
 <script>
-export default {};
+import Trend from "../components/report/Trend";
+
+export default {
+  name: "TrendPage",
+  components: {
+    Trend,
+  },
+};
 </script>
 
-<style></style>
+<style lang="less" scoped></style>
