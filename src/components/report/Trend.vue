@@ -1,5 +1,22 @@
 <template>
   <div class="com-container">
+    <div class="title" @click="showMenu = !showMenu">
+      <span class="before-icon">▎</span>
+      <span>{{ showTitle }}</span>
+
+      <span class="iconfont title-icon">&#xe6eb;</span>
+      <div class="select-con" v-show="showMenu">
+        <div
+          class="select-item"
+          v-show="showMenu"
+          v-for="item in selectTypes"
+          :key="item.key"
+          @click="handleSelect(item.key)"
+        >
+          {{ item.text }}
+        </div>
+      </div>
+    </div>
     <div class="com-chart" ref="trendRef"></div>
   </div>
 </template>
@@ -17,6 +34,16 @@ export default {
       titleFontSize: 0,
       value: "",
     };
+  },
+
+  computed: {
+    selectTypes() {
+      return this.allData ? this.allData.type : [];
+    },
+
+    showTitle() {
+      return this.allData ? this.allData[this.activeName].title : "";
+    },
   },
 
   methods: {
@@ -79,13 +106,13 @@ export default {
         "rgba(250, 105, 0, 0)",
       ];
       const timeArr = this.allData.common.month;
-      const valueArr = this.allData.map.data;
+      const valueArr = this.allData[this.activeName].data;
       const seriesArr = valueArr.map((item, index) => {
         return {
           name: item.name,
           type: "line",
           data: item.data,
-          stack: "map",
+          stack: this.activeName,
           areaStyle: {
             color: new this.$echarts.graphic.LinearGradient(0, 0, 0, 1, [
               {
@@ -123,6 +150,11 @@ export default {
       this.chartInstance.setOption(adapterOption);
       this.chartInstance.resize();
     },
+
+    handleSelect(currentType) {
+      this.activeName = currentType;
+      this.updateChart();
+    },
   },
 
   mounted() {
@@ -138,4 +170,21 @@ export default {
 };
 </script>
 
-<style></style>
+<style lang="less">
+.title {
+  position: absolute;
+  left: 50px;
+  top: 20px;
+  z-index: 999;
+  color: white;
+  cursor: pointer;
+
+  .before-icon {
+    position: absolute;
+    left: -20px;
+  }
+  .title-icon {
+    margin-left: 10px;
+  }
+}
+</style>
