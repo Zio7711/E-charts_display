@@ -28,9 +28,6 @@ export default {
           text: "▎商家销售统计",
           left: 20,
           top: 20,
-          textStyle: {
-            fontSize: 50,
-          },
         },
 
         grid: {
@@ -53,16 +50,11 @@ export default {
           axisPointer: {
             type: "line",
             z: 0,
-            lineStyle: {
-              width: 66,
-              color: "#2D3443",
-            },
           },
         },
         series: [
           {
             type: "bar",
-            barWidth: 66,
             label: {
               show: true,
               position: "right",
@@ -72,7 +64,6 @@ export default {
             },
 
             itemStyle: {
-              barBorderRadius: [0, 33, 33, 0],
               color: new this.$echarts.graphic.LinearGradient(0, 0, 1, 0, [
                 {
                   offset: 0,
@@ -180,10 +171,12 @@ export default {
     this.getData();
 
     window.addEventListener("resize", this.screenAdapter);
+    this.screenAdapter();
   },
 
   beforeDestroy() {
     clearInterval(this.timeId);
+    window.removeEventListener("resize", this.screenAdapter);
   },
 };
 </script>

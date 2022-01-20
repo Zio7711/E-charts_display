@@ -6,7 +6,7 @@ import axios from "axios";
 
 import "./assets/css/global.less";
 
-axios.defaults.baseURL = "http://192.168.201.40:9997/api/";
+axios.defaults.baseURL = "http://192.168.201.41:9997/api/";
 Vue.prototype.$http = axios;
 
 Vue.prototype.$echarts = window.echarts;
