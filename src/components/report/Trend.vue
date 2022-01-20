@@ -55,11 +55,19 @@ export default {
         };
       });
 
+      //legend data
+      const legendArr = valueArr.map((item) => {
+        return item.name;
+      });
+
       const dataOption = {
         xAxis: {
           data: timeArr,
         },
         series: seriesArr,
+        legend: {
+          data: legendArr,
+        },
       };
       this.chartInstance.setOption(dataOption);
     },
