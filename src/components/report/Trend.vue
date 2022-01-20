@@ -1,10 +1,10 @@
 <template>
   <div class="com-container">
-    <div class="title" @click="showMenu = !showMenu">
+    <div class="title" @click="showMenu = !showMenu" :style="comStyle">
       <span class="before-icon">▎</span>
       <span>{{ showTitle }}</span>
 
-      <span class="iconfont title-icon">&#xe6eb;</span>
+      <span class="iconfont title-icon" :style="comStyle">&#xe6eb;</span>
       <div class="select-con" v-show="showMenu">
         <div
           class="select-item"
@@ -45,6 +45,12 @@ export default {
 
     showTitle() {
       return this.allData ? this.allData[this.activeName].title : "";
+    },
+
+    comStyle() {
+      return {
+        fontSize: this.titleFontSize + "px",
+      };
     },
   },
 
@@ -148,13 +154,24 @@ export default {
     },
 
     screenAdapter() {
-      const adapterOption = {};
+      this.titleFontSize = (this.$refs.trendRef.offsetWidth / 100) * 3.6;
+      const adapterOption = {
+        legend: {
+          itemWidth: this.titleFontSize,
+          itemHeight: this.titleFontSize,
+          // 间距
+          itemGap: this.titleFontSize,
+          textStyle: {
+            fontSize: this.titleFontSize / 1.3,
+          },
+        },
+      };
       this.chartInstance.setOption(adapterOption);
       this.chartInstance.resize();
     },
 
-    handleSelect(currentType) {
-      this.activeName = currentType;
+    handleSelect(key) {
+      this.activeName = key;
       this.updateChart();
     },
   },
