@@ -31,7 +31,7 @@ export default {
           top: 20,
         },
         grid: {
-          top: "40%",
+          top: "30%",
           left: "5%",
           right: "5%",
           bottom: "5%",
@@ -128,7 +128,24 @@ export default {
     },
 
     screenAdapter() {
-      const adapterOption = {};
+      const titleFontSize = (this.$refs.rankRef.offsetWidth / 100) * 3.6;
+
+      const adapterOption = {
+        title: {
+          top: "5%",
+          textStyle: {
+            fontSize: titleFontSize,
+          },
+        },
+        series: [
+          {
+            barWidth: titleFontSize,
+            itemStyle: {
+              barBorderRadius: [titleFontSize / 2, titleFontSize / 2, 0, 0],
+            },
+          },
+        ],
+      };
       this.chartInstance.setOption(adapterOption);
       this.chartInstance.resize();
     },
