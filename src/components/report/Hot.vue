@@ -3,10 +3,12 @@
     <div class="com-chart" ref="hotRef"></div>
     <i class="iconfont icon-left" @click="toLeft">&#xe6ef;</i>
     <i class="iconfont icon-right" @click="toRight">&#xe6ed;</i>
+    <span class="cate-name">{{ cateName }}</span>
   </div>
 </template>
 
 <script>
+import _ from "lodash";
 export default {
   name: "Hot",
 
@@ -19,6 +21,13 @@ export default {
     };
   },
 
+  computed: {
+    cateName() {
+      if (!this.allData) return "";
+      return this.allData[this.currentIndex].name;
+    },
+  },
+
   methods: {
     initChart() {
       this.chartInstance = this.$echarts.init(
@@ -26,9 +35,56 @@ export default {
         "purple-passion"
       );
       const initOption = {
+        title: {
+          text: "▎热销商品占比",
+          left: 20,
+          top: 20,
+        },
+
+        legend: {
+          top: "5%",
+          icon: "circle",
+        },
+
+        tooltip: {
+          show: true,
+          formatter: (arg) => {
+            const thirdCategory = arg.data.children;
+            let total = 0;
+            thirdCategory.forEach((item) => {
+              total += item.value;
+            });
+
+            let showStr = "";
+            thirdCategory.forEach((item) => {
+              showStr += `
+                ${item.name}: ${_.round((item.value / total) * 100, 2)}% <br/>
+              `;
+            });
+
+            return showStr;
+          },
+        },
+
         series: [
           {
             type: "pie",
+            label: {
+              show: false,
+            },
+            legend: {
+              top: "15%",
+              // 图标类型 圆形
+              icon: "circle",
+            },
+            emphasis: {
+              label: {
+                show: true,
+              },
+              labelLine: {
+                show: false,
+              },
+            },
           },
         ],
       };
@@ -101,6 +157,8 @@ export default {
 
 <style lang="less" scoped>
 .com-container {
+  color: white;
+
   i {
     z-index: 999;
     position: absolute;
