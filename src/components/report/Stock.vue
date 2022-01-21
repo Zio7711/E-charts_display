@@ -45,6 +45,7 @@ export default {
         },
       };
       this.chartInstance.setOption(initOption);
+
       this.chartInstance.on("mouseover", () => {
         clearInterval(this.timerId);
       });
@@ -73,7 +74,6 @@ export default {
           labelLine: {
             show: false,
           },
-          radius: [110, 100],
           center: this.centerArr[index],
           label: { position: "center", color: this.colorArr[index][0] },
           data: [
@@ -117,8 +117,55 @@ export default {
     },
 
     screenAdapter() {
-      const adapterOption = {};
+      const titleFontSize = (this.$refs.stockRef.offsetWidth / 100) * 3.6;
+      const innerRadius = titleFontSize * 2.8;
+      const outerRadius = innerRadius * 1.2;
+      const adapterOption = {
+        title: {
+          textStyle: {
+            fontSize: titleFontSize,
+          },
+        },
+        series: [
+          {
+            type: "pie",
+            radius: [outerRadius, innerRadius],
+            label: {
+              fontSize: titleFontSize / 1.2,
+            },
+          },
+          {
+            type: "pie",
+            radius: [outerRadius, innerRadius],
+            label: {
+              fontSize: titleFontSize / 1.2,
+            },
+          },
+          {
+            type: "pie",
+            radius: [outerRadius, innerRadius],
+            label: {
+              fontSize: titleFontSize / 1.2,
+            },
+          },
+          {
+            type: "pie",
+            radius: [outerRadius, innerRadius],
+            label: {
+              fontSize: titleFontSize / 1.2,
+            },
+          },
+          {
+            type: "pie",
+            radius: [outerRadius, innerRadius],
+            label: {
+              fontSize: titleFontSize / 1.2,
+            },
+          },
+        ],
+      };
       this.chartInstance.setOption(adapterOption);
+      console.log("innerRadius", innerRadius);
       this.chartInstance.resize();
     },
 
