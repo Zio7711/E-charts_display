@@ -25,6 +25,23 @@ export default {
         "purple-passion"
       );
       const initOption = {
+        title: {
+          text: "▎地区销售排行",
+          left: 20,
+          top: 20,
+        },
+        grid: {
+          top: "40%",
+          left: "5%",
+          right: "5%",
+          bottom: "5%",
+          containLabel: true,
+        },
+
+        tooltip: {
+          show: true,
+        },
+
         xAxis: {
           type: "category",
         },
@@ -36,6 +53,12 @@ export default {
         series: [
           {
             type: "bar",
+            label: {
+              show: true,
+              position: "top",
+              color: "white",
+              rotate: 30,
+            },
           },
         ],
       };
@@ -45,6 +68,7 @@ export default {
     async getData() {
       const res = await this.$http.get("rank");
       this.allData = res.data;
+      this.allData.sort((a, b) => b.value - a.value);
       this.updateChart();
     },
 
@@ -65,6 +89,24 @@ export default {
         series: [
           {
             data: valueArr,
+            itemStyle: {
+              color: (arg) => {
+                let targetColorArr = null;
+
+                if (arg.value > 300) {
+                  targetColorArr = colorArr[0];
+                } else if (arg.value > 200) {
+                  targetColorArr = colorArr[1];
+                } else {
+                  targetColorArr = colorArr[2];
+                }
+
+                return new this.$echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                  { offset: 0, color: targetColorArr[0] },
+                  { offset: 1, color: targetColorArr[1] },
+                ]);
+              },
+            },
           },
         ],
       };
