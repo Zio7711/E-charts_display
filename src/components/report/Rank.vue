@@ -70,6 +70,7 @@ export default {
       this.allData = res.data;
       this.allData.sort((a, b) => b.value - a.value);
       this.updateChart();
+      this.startInterval();
     },
 
     updateChart() {
@@ -84,6 +85,13 @@ export default {
       const dataOption = {
         xAxis: {
           data: provinceInfo,
+        },
+
+        dataZoom: {
+          // 区域缩放组件
+          show: false,
+          startValue: this.startValue,
+          endValue: this.endValue,
         },
 
         series: [
@@ -118,6 +126,20 @@ export default {
       this.chartInstance.setOption(adapterOption);
       this.chartInstance.resize();
     },
+
+    startInterval() {
+      this.timerId && clearInterval(this.timerId);
+
+      this.timerId = setInterval(() => {
+        this.startValue++;
+        this.endValue++;
+        if (this.endValue > this.allData.length - 1) {
+          this.startValue = 0;
+          this.endValue = 9;
+        }
+        this.updateChart();
+      }, 2000);
+    },
   },
 
   mounted() {
@@ -129,6 +151,7 @@ export default {
 
   destroyed() {
     window.removeEventListener("resize", this.screenAdapter);
+    clearInterval(this.timerId);
   },
 };
 </script>
