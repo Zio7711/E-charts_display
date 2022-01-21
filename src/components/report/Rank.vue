@@ -24,16 +24,50 @@ export default {
         this.$refs.rankRef,
         "purple-passion"
       );
-      const initOption = {};
+      const initOption = {
+        xAxis: {
+          type: "category",
+        },
+
+        yAxis: {
+          type: "value",
+        },
+
+        series: [
+          {
+            type: "bar",
+          },
+        ],
+      };
       this.chartInstance.setOption(initOption);
     },
 
     async getData() {
+      const res = await this.$http.get("rank");
+      this.allData = res.data;
       this.updateChart();
     },
 
     updateChart() {
-      const dataOption = {};
+      const colorArr = [
+        ["#0BA82C", "#4FF778"],
+        ["#2E72BF", "#23E5E5"],
+        ["#5052EE", "#AB6EE5"],
+      ];
+      const provinceInfo = this.allData.map((item) => item.name);
+      const valueArr = this.allData.map((item) => item.value);
+
+      const dataOption = {
+        xAxis: {
+          data: provinceInfo,
+        },
+
+        series: [
+          {
+            data: valueArr,
+          },
+        ],
+      };
       this.chartInstance.setOption(dataOption);
     },
 
