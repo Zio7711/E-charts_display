@@ -1,9 +1,11 @@
 <template>
   <div class="com-container">
     <div class="com-chart" ref="hotRef"></div>
-    <i class="iconfont icon-left" @click="toLeft">&#xe6ef;</i>
-    <i class="iconfont icon-right" @click="toRight">&#xe6ed;</i>
-    <span class="cate-name">{{ cateName }}</span>
+    <i class="iconfont icon-left" @click="toLeft" :style="comStyle">&#xe6ef;</i>
+    <i class="iconfont icon-right" @click="toRight" :style="comStyle"
+      >&#xe6ed;</i
+    >
+    <span class="cate-name" :style="comStyle">{{ cateName }}</span>
   </div>
 </template>
 
@@ -26,6 +28,12 @@ export default {
       if (!this.allData) return "";
       return this.allData[this.currentIndex].name;
     },
+
+    comStyle() {
+      return {
+        fontSize: this.titleFontSize + "px",
+      };
+    },
   },
 
   methods: {
@@ -38,7 +46,7 @@ export default {
         title: {
           text: "▎热销商品占比",
           left: 20,
-          top: 20,
+          top: "5%",
         },
 
         legend: {
