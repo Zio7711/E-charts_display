@@ -1,6 +1,8 @@
 <template>
   <div class="com-container">
     <div class="com-chart" ref="hotRef"></div>
+    <i class="iconfont icon-left" @click="toLeft">&#xe6ef;</i>
+    <i class="iconfont icon-right" @click="toRight">&#xe6ed;</i>
   </div>
 </template>
 
@@ -40,7 +42,7 @@ export default {
     },
 
     updateChart() {
-      const legendDateArr = this.allData[this.currentIndex].children.map(
+      const legendDataArr = this.allData[this.currentIndex].children.map(
         (item) => item.name
       );
       const seriesDataArr = this.allData[this.currentIndex].children.map(
@@ -54,6 +56,9 @@ export default {
       );
 
       const dataOption = {
+        legend: {
+          data: legendDataArr,
+        },
         series: [
           {
             data: seriesDataArr,
@@ -67,6 +72,17 @@ export default {
       const adapterOption = {};
       this.chartInstance.setOption(adapterOption);
       this.chartInstance.resize();
+    },
+
+    toLeft() {
+      this.currentIndex--;
+      if (this.currentIndex < 0) this.currentIndex = this.allData.length - 1;
+      this.updateChart();
+    },
+    toRight() {
+      this.currentIndex++;
+      if (this.currentIndex > this.allData.length - 1) this.currentIndex = 0;
+      this.updateChart();
     },
   },
 
@@ -83,4 +99,26 @@ export default {
 };
 </script>
 
-<style></style>
+<style lang="less" scoped>
+.com-container {
+  i {
+    z-index: 999;
+    position: absolute;
+    transform: translateY(-50%);
+    top: 50%;
+    cursor: pointer;
+  }
+  i.icon-left {
+    left: 10%;
+  }
+  i.icon-right {
+    right: 10%;
+  }
+  .cate-name {
+    position: absolute;
+    right: 10%;
+    bottom: 20px;
+    z-index: 999;
+  }
+}
+</style>
