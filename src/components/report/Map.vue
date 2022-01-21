@@ -1,5 +1,5 @@
 <template>
-  <div class="com-container">
+  <div class="com-container" @click="revertMap">
     <div class="com-chart" ref="mapRef"></div>
   </div>
 </template>
@@ -119,6 +119,16 @@ export default {
       };
       this.chartInstance.setOption(adapterOption);
       this.chartInstance.resize();
+    },
+
+    revertMap() {
+      const revertOption = {
+        geo: {
+          map: "china",
+        },
+      };
+
+      this.chartInstance.setOption(revertOption);
     },
   },
 
