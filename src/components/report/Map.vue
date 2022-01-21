@@ -63,7 +63,6 @@ export default {
             );
 
             this.mapData[provinceInfo.key] = res.data;
-
             this.$echarts.registerMap(provinceInfo.key, res.data);
           }
 
