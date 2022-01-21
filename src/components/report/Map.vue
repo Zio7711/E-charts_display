@@ -1,14 +1,13 @@
 <template>
-  <div class="com-container" @click="revertMap">
+  <div class="com-container" @dblclick="revertMap">
     <div class="com-chart" ref="mapRef"></div>
   </div>
 </template>
 
 <script>
-import chinaMap from "../../../public/map/china.json";
 import axios from "axios";
-
 import { getProvinceMapInfo } from "../../utils/map_utils";
+
 export default {
   name: "Map",
 
@@ -16,17 +15,20 @@ export default {
     return {
       chartInstance: null,
       allData: null,
-      showMenu: false,
+      mapData: {},
     };
   },
 
   methods: {
-    initChart() {
+    async initChart() {
       this.chartInstance = this.$echarts.init(
         this.$refs.mapRef,
         "purple-passion"
       );
-      this.$echarts.registerMap("china", chinaMap);
+
+      const res = await axios.get("http://localhost:8080/map/china.json");
+      this.$echarts.registerMap("china", res.data);
+
       const initOption = {
         title: {
           text: "▎商家分布",
@@ -37,30 +39,42 @@ export default {
           type: "map",
           map: "china",
           top: "5%",
-          bottom: "10%",
-          roam: true,
-
+          bottom: "5%",
           itemStyle: {
             areaColor: "#2E72BF",
             borderColor: "#333",
           },
         },
+
+        legend: {
+          left: "5%",
+          bottom: "5%",
+          orient: "vertical",
+        },
       };
       this.chartInstance.setOption(initOption);
       this.chartInstance.on("click", async (arg) => {
         const provinceInfo = getProvinceMapInfo(arg.name);
-        const mapData = await axios.get(
-          "http://localhost:8080" + provinceInfo.path
-        );
 
-        this.$echarts.registerMap(provinceInfo.key, mapData.data);
-        const changeOption = {
-          geo: {
-            map: provinceInfo.key,
-          },
-        };
+        if (provinceInfo.key) {
+          if (!this.mapData[provinceInfo.key]) {
+            const res = await axios.get(
+              "http://localhost:8080" + provinceInfo.path
+            );
 
-        this.chartInstance.setOption(changeOption);
+            this.mapData[provinceInfo.key] = res.data;
+
+            this.$echarts.registerMap(provinceInfo.key, res.data);
+          }
+
+          const changeOption = {
+            geo: {
+              map: provinceInfo.key,
+            },
+          };
+
+          this.chartInstance.setOption(changeOption);
+        }
       });
     },
 
@@ -89,10 +103,7 @@ export default {
       });
       const dataOption = {
         legend: {
-          left: "2%",
-          bottom: "5%",
-          orient: "vertical",
-          data: legendArr.reverse(),
+          data: legendArr,
         },
         series: seriesArr,
       };
