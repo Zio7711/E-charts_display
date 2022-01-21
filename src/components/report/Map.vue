@@ -1,6 +1,6 @@
 <template>
   <div class="com-container">
-    <div class="com-chart" ref="trendRef"></div>
+    <div class="com-chart" ref="mapRef"></div>
   </div>
 </template>
 
@@ -20,7 +20,7 @@ export default {
   methods: {
     initChart() {
       this.chartInstance = this.$echarts.init(
-        this.$refs.trendRef,
+        this.$refs.mapRef,
         "purple-passion"
       );
       this.$echarts.registerMap("china", chinaMap);
@@ -65,7 +65,7 @@ export default {
           coordinateSystem: "geo",
           rippleEffect: {
             scale: 10,
-            brushType: "stroke",
+            // brushType: "stroke",
           },
         };
       });
@@ -82,7 +82,24 @@ export default {
     },
 
     screenAdapter() {
-      const adapterOption = {};
+      const titleFontSize = (this.$refs.mapRef.offsetWidth / 100) * 3.6;
+      console.log("titleFontSize: ", titleFontSize);
+
+      const adapterOption = {
+        title: {
+          textStyle: {
+            fontSize: titleFontSize,
+          },
+        },
+        legend: {
+          itemWidth: titleFontSize / 2,
+          itemHeight: titleFontSize / 2,
+          itemGap: titleFontSize / 2,
+          textStyle: {
+            fontSize: titleFontSize / 2,
+          },
+        },
+      };
       this.chartInstance.setOption(adapterOption);
       this.chartInstance.resize();
     },
