@@ -42,7 +42,7 @@ export default {
         },
 
         legend: {
-          top: "5%",
+          top: "15%",
           icon: "circle",
         },
 
@@ -74,7 +74,6 @@ export default {
             },
             legend: {
               top: "15%",
-              // 图标类型 圆形
               icon: "circle",
             },
             emphasis: {
@@ -125,7 +124,30 @@ export default {
     },
 
     screenAdapter() {
-      const adapterOption = {};
+      this.titleFontSize = (this.$refs.hotRef.offsetWidth / 100) * 3.6;
+
+      const adapterOption = {
+        title: {
+          textStyle: {
+            fontSize: this.titleFontSize,
+          },
+        },
+
+        series: [
+          {
+            radius: this.titleFontSize * 4.5,
+            center: ["50%", "60%"],
+          },
+        ],
+        legend: {
+          itemWidth: this.titleFontSize / 2,
+          itemHeight: this.titleFontSize / 2,
+          itemGap: this.titleFontSize / 2,
+          textStyle: {
+            fontSize: this.titleFontSize / 2,
+          },
+        },
+      };
       this.chartInstance.setOption(adapterOption);
       this.chartInstance.resize();
     },
