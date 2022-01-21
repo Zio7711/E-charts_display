@@ -63,6 +63,12 @@ export default {
         ],
       };
       this.chartInstance.setOption(initOption);
+      this.chartInstance.on("mouseover", () => {
+        clearInterval(this.timerId);
+      });
+      this.chartInstance.on("mouseout", () => {
+        this.startInterval();
+      });
     },
 
     async getData() {
