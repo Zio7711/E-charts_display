@@ -45,6 +45,12 @@ export default {
         },
       };
       this.chartInstance.setOption(initOption);
+      this.chartInstance.on("mouseover", () => {
+        clearInterval(this.timerId);
+      });
+      this.chartInstance.on("mouseout", () => {
+        this.startInterval();
+      });
     },
 
     async getData() {
@@ -52,6 +58,7 @@ export default {
       this.allData = res;
 
       this.updateChart();
+      this.startInterval();
     },
 
     updateChart() {
@@ -114,6 +121,15 @@ export default {
       this.chartInstance.setOption(adapterOption);
       this.chartInstance.resize();
     },
+
+    startInterval() {
+      this.timerId && clearInterval(this.timerId);
+      this.timerId = setInterval(() => {
+        this.currentIndex++;
+        if (this.currentIndex > 2) this.currentIndex = 1;
+        this.updateChart();
+      }, 5000);
+    },
   },
 
   mounted() {
@@ -125,6 +141,7 @@ export default {
 
   destroyed() {
     window.removeEventListener("resize", this.screenAdapter);
+    clearInterval(this.timerId);
   },
 };
 </script>
