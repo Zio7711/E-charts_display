@@ -6,6 +6,9 @@
 
 <script>
 import chinaMap from "../../../public/map/china.json";
+import axios from "axios";
+
+import { getProvinceMapInfo } from "../../utils/map_utils";
 export default {
   name: "Map",
 
@@ -34,7 +37,7 @@ export default {
           type: "map",
           map: "china",
           top: "5%",
-          bottom: "-30%",
+          bottom: "10%",
           roam: true,
 
           itemStyle: {
@@ -44,6 +47,21 @@ export default {
         },
       };
       this.chartInstance.setOption(initOption);
+      this.chartInstance.on("click", async (arg) => {
+        const provinceInfo = getProvinceMapInfo(arg.name);
+        const mapData = await axios.get(
+          "http://localhost:8080" + provinceInfo.path
+        );
+
+        this.$echarts.registerMap(provinceInfo.key, mapData.data);
+        const changeOption = {
+          geo: {
+            map: provinceInfo.key,
+          },
+        };
+
+        this.chartInstance.setOption(changeOption);
+      });
     },
 
     async getData() {
@@ -83,7 +101,6 @@ export default {
 
     screenAdapter() {
       const titleFontSize = (this.$refs.mapRef.offsetWidth / 100) * 3.6;
-      console.log("titleFontSize: ", titleFontSize);
 
       const adapterOption = {
         title: {
