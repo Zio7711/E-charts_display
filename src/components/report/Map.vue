@@ -77,8 +77,8 @@ export default {
       });
     },
 
-    async getData() {
-      const { data: res } = await this.$http.get("map");
+    getData(res) {
+      // const { data: res } = await this.$http.get("map");
       this.allData = res;
 
       this.updateChart();
@@ -142,15 +142,26 @@ export default {
     },
   },
 
+  created() {
+    this.$socket.registerCallBack("mapData", this.getData);
+  },
+
   mounted() {
     this.initChart();
-    this.getData();
+    // this.getData();
+    this.$socket.send({
+      action: "getData",
+      socketType: "mapData",
+      chartName: "map",
+      value: "",
+    });
     window.addEventListener("resize", this.screenAdapter);
     this.screenAdapter();
   },
 
   destroyed() {
     window.removeEventListener("resize", this.screenAdapter);
+    this.$socket.unRegisterCallBack("mapData");
   },
 };
 </script>
