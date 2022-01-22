@@ -11,6 +11,7 @@
 
 <script>
 import _ from "lodash";
+import { mapState } from "vuex";
 export default {
   name: "Hot",
 
@@ -34,14 +35,13 @@ export default {
         fontSize: this.titleFontSize + "px",
       };
     },
+
+    ...mapState(["theme"]),
   },
 
   methods: {
     initChart() {
-      this.chartInstance = this.$echarts.init(
-        this.$refs.hotRef,
-        "purple-passion"
-      );
+      this.chartInstance = this.$echarts.init(this.$refs.hotRef, this.theme);
       const initOption = {
         title: {
           text: "▎热销商品占比",
@@ -170,6 +170,15 @@ export default {
       this.currentIndex++;
       if (this.currentIndex > this.allData.length - 1) this.currentIndex = 0;
       this.updateChart();
+    },
+  },
+
+  watch: {
+    theme() {
+      this.chartInstance.dispose();
+      this.initChart();
+      this.updateChart();
+      this.screenAdapter();
     },
   },
 

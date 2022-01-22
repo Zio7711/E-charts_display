@@ -5,6 +5,8 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
   name: "Seller",
   data() {
@@ -18,10 +20,7 @@ export default {
   },
   methods: {
     initChart() {
-      this.chartInstance = this.$echarts.init(
-        this.$refs.sellerRef,
-        "purple-passion"
-      );
+      this.chartInstance = this.$echarts.init(this.$refs.sellerRef, this.theme);
 
       const initOption = {
         title: {
@@ -166,6 +165,17 @@ export default {
     },
   },
 
+  computed: {
+    ...mapState(["theme"]),
+  },
+  watch: {
+    theme() {
+      this.chartInstance.dispose();
+      this.initChart();
+      this.screenAdapter();
+      this.updateChart();
+    },
+  },
   created() {
     this.$socket.registerCallBack("sellerData", this.getData);
   },

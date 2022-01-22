@@ -24,6 +24,8 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
   name: "Trend",
 
@@ -39,6 +41,8 @@ export default {
   },
 
   computed: {
+    ...mapState(["theme"]),
+
     selectTypes() {
       return this.allData
         ? this.allData.type.filter((item) => item.key !== this.activeName)
@@ -57,12 +61,18 @@ export default {
     },
   },
 
+  watch: {
+    theme() {
+      this.chartInstance.dispose();
+      this.initChart();
+      this.updateChart();
+      this.screenAdapter();
+    },
+  },
+
   methods: {
     initChart() {
-      this.chartInstance = this.$echarts.init(
-        this.$refs.trendRef,
-        "purple-passion"
-      );
+      this.chartInstance = this.$echarts.init(this.$refs.trendRef, this.theme);
       const initOption = {
         grid: {
           left: "3%",

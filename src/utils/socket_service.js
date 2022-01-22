@@ -48,8 +48,6 @@ export default class SocketService {
           this.callBackMapping[socketType].call(this, recvData);
         }
       }
-
-      console.log("got data from server");
     };
   }
 

@@ -5,6 +5,8 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
   name: "Rank",
 
@@ -18,12 +20,21 @@ export default {
     };
   },
 
+  computed: {
+    ...mapState(["theme"]),
+  },
+  watch: {
+    theme() {
+      this.chartInstance.dispose();
+      this.initChart();
+      this.updateChart();
+      this.screenAdapter();
+    },
+  },
+
   methods: {
     initChart() {
-      this.chartInstance = this.$echarts.init(
-        this.$refs.rankRef,
-        "purple-passion"
-      );
+      this.chartInstance = this.$echarts.init(this.$refs.rankRef, this.theme);
       const initOption = {
         title: {
           text: "▎地区销售排行",

@@ -7,6 +7,7 @@
 <script>
 import axios from "axios";
 import { getProvinceMapInfo } from "../../utils/map_utils";
+import { mapState } from "vuex";
 
 export default {
   name: "Map",
@@ -18,13 +19,13 @@ export default {
       mapData: {},
     };
   },
+  computed: {
+    ...mapState(["theme"]),
+  },
 
   methods: {
     async initChart() {
-      this.chartInstance = this.$echarts.init(
-        this.$refs.mapRef,
-        "purple-passion"
-      );
+      this.chartInstance = this.$echarts.init(this.$refs.mapRef, this.theme);
 
       const res = await axios.get("http://localhost:8080/map/china.json");
       this.$echarts.registerMap("china", res.data);
@@ -139,6 +140,14 @@ export default {
       };
 
       this.chartInstance.setOption(revertOption);
+    },
+  },
+  watch: {
+    theme() {
+      this.chartInstance.dispose();
+      this.initChart();
+      this.updateChart();
+      this.screenAdapter();
     },
   },
 

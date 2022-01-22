@@ -5,6 +5,8 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
   name: "Stock",
 
@@ -33,10 +35,7 @@ export default {
 
   methods: {
     initChart() {
-      this.chartInstance = this.$echarts.init(
-        this.$refs.stockRef,
-        "purple-passion"
-      );
+      this.chartInstance = this.$echarts.init(this.$refs.stockRef, this.theme);
       const initOption = {
         title: {
           text: "▎库存和销量分析",
@@ -165,7 +164,6 @@ export default {
         ],
       };
       this.chartInstance.setOption(adapterOption);
-      console.log("innerRadius", innerRadius);
       this.chartInstance.resize();
     },
 
@@ -176,6 +174,19 @@ export default {
         if (this.currentIndex > 2) this.currentIndex = 1;
         this.updateChart();
       }, 5000);
+    },
+  },
+
+  computed: {
+    ...mapState(["theme"]),
+  },
+
+  watch: {
+    theme() {
+      this.chartInstance.dispose();
+      this.initChart();
+      this.updateChart();
+      this.screenAdapter();
     },
   },
 

@@ -1,5 +1,5 @@
 <template>
-  <div class="screen-container" :style="containerStyle">
+  <div class="screen-container">
     <header class="screen-header">
       <div>
         <!-- <img :src="headerSrc" alt=""> -->
@@ -9,7 +9,6 @@
       <div class="title-right">
         <!-- <img :src="themeSrc" class="qiehuan" @click="handleChangeTheme" alt="切换主题" title="切换主题"> -->
         <img
-          v-show="theme == 'chalk'"
           src="~@/assets/images/qiehuan_dark.png"
           class="qiehuan"
           @click="handleChangeTheme"
@@ -17,7 +16,6 @@
           title="切换主题"
         />
         <img
-          v-show="theme != 'chalk'"
           src="~@/assets/images/qiehuan_light.png"
           class="qiehuan"
           @click="handleChangeTheme"
@@ -160,6 +158,48 @@ export default {
       timerID: null,
     };
   },
+
+  methods: {
+    changeSize(chartName) {
+      // this.fullScreenStatus[chartName] = !this.fullScreenStatus[chartName];
+      // this.$nextTick(() => {
+      //   this.$refs[chartName].screenAdapter();
+      // });
+
+      const targetValue = !this.fullScreenStatus[chartName];
+      this.$socket.send({
+        action: "fullScreen",
+        socketType: "fullScreen",
+        chartName: chartName,
+        value: targetValue,
+      });
+    },
+
+    recvData(data) {
+      // 取出是那一个图表进行切换
+      const chartName = data.chartName;
+      // 判断切换成什么类型[true全屏，false取消全屏]
+      const targetValue = data.value;
+
+      this.fullScreenStatus[chartName] = targetValue;
+      this.$nextTick(() => {
+        this.$refs[chartName].screenAdapter();
+      });
+    },
+
+    handleChangeTheme() {
+      this.$store.commit("CHANGETHEME");
+    },
+  },
+
+  created() {
+    this.$socket.registerCallBack("fullScreen", this.recvData);
+  },
+
+  destroyed() {
+    // 组件销毁时，销毁事件
+    this.$socket.unRegisterCallBack("fullScreen");
+  },
 };
 </script>
 <style lang="less" scoped>
@@ -279,6 +319,10 @@ export default {
   position: absolute;
   right: 20px;
   top: 20px;
+
   cursor: pointer;
+  .iconfont {
+    font-size: 22px;
+  }
 }
 </style>
