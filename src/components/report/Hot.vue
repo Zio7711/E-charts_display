@@ -12,6 +12,7 @@
 <script>
 import _ from "lodash";
 import { mapState } from "vuex";
+import { getThemeValue } from "../../utils/theme_utils";
 export default {
   name: "Hot",
 
@@ -33,6 +34,7 @@ export default {
     comStyle() {
       return {
         fontSize: this.titleFontSize + "px",
+        color: getThemeValue(this.theme).titleColor,
       };
     },
 

@@ -1,11 +1,13 @@
 <template>
-  <div class="screen-container">
+  <div class="screen-container" :style="containerStyle">
     <header class="screen-header">
       <div>
         <!-- <img :src="headerSrc" alt=""> -->
       </div>
 
-      <span class="title">Real Time Data Display Chart</span>
+      <span class="title" :style="titleStyle"
+        >Real Time Data Display Chart</span
+      >
       <div class="title-right">
         <!-- <img :src="themeSrc" class="qiehuan" @click="handleChangeTheme" alt="切换主题" title="切换主题"> -->
         <img
@@ -14,6 +16,7 @@
           @click="handleChangeTheme"
           alt="切换主题"
           title="切换主题"
+          v-show="theme === 'purple-passion'"
         />
         <img
           src="~@/assets/images/qiehuan_light.png"
@@ -21,6 +24,7 @@
           @click="handleChangeTheme"
           alt="切换主题"
           title="切换主题"
+          v-show="theme === 'vintage'"
         />
         <div class="datetime">{{ systemDateTime }}</div>
       </div>
@@ -128,6 +132,9 @@ import Rank from "@/components/report/Rank.vue";
 import Seller from "@/components/report/Seller.vue";
 import Stock from "@/components/report/Stock.vue";
 import Trend from "@/components/report/Trend.vue";
+import { getThemeValue } from "../utils/theme_utils";
+
+import { mapState } from "vuex";
 
 // 导入自己定义的主题工具函数 用于返回不同主题下的配置对象
 
@@ -159,6 +166,23 @@ export default {
     };
   },
 
+  computed: {
+    ...mapState(["theme"]),
+
+    containerStyle() {
+      return {
+        backgroundColor: getThemeValue(this.theme).backgroundColor,
+        color: getThemeValue(this.theme).titleColor,
+      };
+    },
+
+    titleStyle() {
+      return {
+        color: getThemeValue(this.theme).titleColor,
+      };
+    },
+  },
+
   methods: {
     changeSize(chartName) {
       // this.fullScreenStatus[chartName] = !this.fullScreenStatus[chartName];
@@ -188,17 +212,41 @@ export default {
     },
 
     handleChangeTheme() {
+      // this.$store.commit("CHANGETHEME");
+      this.$socket.send({
+        action: "themeChange",
+        socketType: "themeChange",
+        chartName: "",
+        value: "",
+      });
+    },
+
+    recvThemeChange() {
       this.$store.commit("CHANGETHEME");
+    },
+
+    currentTime() {
+      this.systemDateTime = new Date().toLocaleString();
+
+      this.timerID && clearInterval(this.timerID);
+
+      this.timerID = setInterval(() => {
+        this.systemDateTime = new Date().toLocaleString();
+      }, 1000);
     },
   },
 
   created() {
+    this.currentTime();
     this.$socket.registerCallBack("fullScreen", this.recvData);
+    this.$socket.registerCallBack("themeChange", this.recvThemeChange);
   },
 
   destroyed() {
     // 组件销毁时，销毁事件
     this.$socket.unRegisterCallBack("fullScreen");
+    this.$socket.unRegisterCallBack("themeChange");
+    clearInterval(this.timerID);
   },
 };
 </script>
@@ -249,11 +297,11 @@ export default {
   }
   .qiehuan {
     width: 28px;
-    height: 21px;
+    height: 23px;
     cursor: pointer;
   }
   .datetime {
-    font-size: 15px;
+    font-size: 25px;
     margin-left: 10px;
   }
   .logo {

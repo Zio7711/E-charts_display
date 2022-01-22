@@ -25,7 +25,7 @@
 
 <script>
 import { mapState } from "vuex";
-
+import { getThemeValue } from "../../utils/theme_utils";
 export default {
   name: "Trend",
 
@@ -57,6 +57,7 @@ export default {
       return {
         fontSize: this.titleFontSize + "px",
         paddingLeft: this.titleFontSize / 3 + "px",
+        color: getThemeValue(this.theme).titleColor,
       };
     },
   },
