@@ -27,7 +27,7 @@ export default {
         title: {
           text: "▎商家销售统计",
           left: 20,
-          top: 20,
+          top: "5%",
         },
 
         grid: {
@@ -90,9 +90,9 @@ export default {
       });
     },
 
-    async getData() {
-      const { data: ret } = await this.$http.get("seller");
-      this.allData = ret;
+    getData(res) {
+      // const { data: ret } = await this.$http.get("seller");
+      this.allData = res;
 
       //sort all data and separate them in to different page
       this.allData.sort((a, b) => b.value - a.value);
@@ -166,15 +166,25 @@ export default {
     },
   },
 
+  created() {
+    this.$socket.registerCallBack("sellerData", this.getData);
+  },
   mounted() {
     this.initChart();
-    this.getData();
+    // this.getData();
+    this.$socket.send({
+      action: "getData",
+      socketType: "sellerData",
+      chartName: "seller",
+      value: "",
+    });
 
     window.addEventListener("resize", this.screenAdapter);
     this.screenAdapter();
   },
 
   beforeDestroy() {
+    this.$$socket.unRegisterCallBack("sellerData");
     clearInterval(this.timeId);
     window.removeEventListener("resize", this.screenAdapter);
   },
