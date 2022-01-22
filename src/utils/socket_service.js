@@ -8,6 +8,7 @@ export default class SocketService {
   }
 
   ws = null;
+  connected = false;
   connect() {
     if (!window.WebSocket) return console.log("您的浏览器不支持 WebSocket");
 
@@ -15,14 +16,64 @@ export default class SocketService {
 
     this.ws.onopen = () => {
       console.log("ws connected successful");
+      this.connected = true;
     };
 
     this.ws.onclose = () => {
-      console.log("ws connected failed");
+      this.connectRetryCount++;
+      this.connected = false;
+      setTimeout(() => {
+        this.connect();
+      }, this.connectRetryCount * 500);
+      console.log("ws connected closed");
+    };
+
+    this.ws.onerror = () => {
+      this.connected = false;
+      console.log("error on connecting ws");
     };
 
     this.ws.onmessage = (msg) => {
-      console.log("got data from server", msg.data);
+      const recvData = JSON.parse(msg.data);
+      const socketType = recvData.socketType;
+
+      if (this.callBackMapping[socketType]) {
+        const action = recvData.action;
+        if (action === "getData") {
+          const realData = JSON.parse(recvData.data);
+          this.callBackMapping[socketType](realData);
+        } else if (action === "fullScreen") {
+          this.callBackMapping[socketType].call(this, recvData);
+        } else if (action === "themeChange") {
+          this.callBackMapping[socketType].call(this, recvData);
+        }
+      }
+
+      console.log("got data from server");
     };
+  }
+
+  callBackMapping = {};
+
+  registerCallBack(socketType, callback) {
+    this.callBackMapping[socketType] = callback;
+  }
+
+  unRegisterCallBack(socketType) {
+    this.callBackMapping[socketType] = null;
+  }
+
+  send(data) {
+    if (this.connected) {
+      this.sendRetryCount = 0;
+
+      this.ws.send(JSON.stringify(data));
+    } else {
+      this.sendRetryCount++;
+
+      setTimeout(() => {
+        this.send(data);
+      }, this.sendRetryCount * 500);
+    }
   }
 }

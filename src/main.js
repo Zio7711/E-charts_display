@@ -10,8 +10,9 @@ import SocketService from "./utils/socket_service";
 SocketService.Instance.connect();
 
 axios.defaults.baseURL = "http://192.168.201.38:9997/api/";
-Vue.prototype.$http = axios;
 
+Vue.prototype.$http = axios;
+Vue.prototype.$socket = SocketService.Instance;
 Vue.prototype.$echarts = window.echarts;
 
 Vue.config.productionTip = false;

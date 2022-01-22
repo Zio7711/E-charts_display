@@ -92,8 +92,9 @@ export default {
       this.chartInstance.setOption(initOption);
     },
 
-    async getData() {
-      const { data: res } = await this.$http.get("trend");
+    async getData(res) {
+      // const { data: res } = await this.$http.get("trend");
+
       this.allData = res;
 
       this.updateChart();
@@ -179,15 +180,26 @@ export default {
     },
   },
 
+  created() {
+    this.$socket.registerCallBack("trendData", this.getData);
+  },
+
   mounted() {
     this.initChart();
-    this.getData();
+    // this.getData();
+    this.$socket.send({
+      action: "getData",
+      socketType: "trendData",
+      chartName: "trend",
+      value: "",
+    });
     window.addEventListener("resize", this.screenAdapter);
     this.screenAdapter();
   },
 
   destroyed() {
     window.removeEventListener("resize", this.screenAdapter);
+    this.$socket.unRegisterCallBack("trendData");
   },
 };
 </script>
