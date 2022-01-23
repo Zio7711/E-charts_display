@@ -28,7 +28,9 @@ export default {
       this.chartInstance = this.$echarts.init(this.$refs.mapRef, this.theme);
 
       // const res = await this.$http.get(`/map/china`);
-      const res = await axios.get("http://localhost:8080/map/china.json");
+      const res = await axios.get(
+        "https://e-charts-display.vercel.app/map/china.json"
+      );
       this.$echarts.registerMap("china", res.data);
 
       const initOption = {
@@ -61,7 +63,7 @@ export default {
         if (provinceInfo.key) {
           if (!this.mapData[provinceInfo.key]) {
             const res = await axios.get(
-              "http://localhost:8080" + provinceInfo.path
+              "https://e-charts-display.vercel.app/" + provinceInfo.path
             );
 
             // const res = await this.$http.get(`/${provinceInfo.path}`);
