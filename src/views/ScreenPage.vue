@@ -1,10 +1,6 @@
 <template>
   <div class="screen-container" :style="containerStyle">
     <header class="screen-header">
-      <div>
-        <!-- <img :src="headerSrc" alt=""> -->
-      </div>
-
       <span class="title" :style="titleStyle"
         >Real Time Data Display Chart</span
       >
@@ -378,6 +374,36 @@ export default {
   .screen-container {
     overflow: auto;
   }
+
+  .screen-header {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    height: 100px;
+    font-size: 20px;
+
+    .title {
+      text-align: center;
+      width: 100%;
+      font-size: 20px;
+    }
+
+    .title-right {
+      top: 90%;
+      left: 55%;
+      font-size: 20px;
+    }
+
+    .qiehuan {
+      width: 20px;
+      height: 16px;
+      cursor: pointer;
+    }
+    .datetime {
+      font-size: 12px;
+    }
+  }
+
   .screen-body {
     display: flex;
     flex-direction: column;
