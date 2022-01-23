@@ -104,7 +104,8 @@ export default {
     },
 
     async getData() {
-      const { data: res } = await this.$http.get("trend");
+      // const { data: res } = await this.$http.get("trend");
+      const { data: res } = await this.$http.get("trend.json");
 
       this.allData = res;
 

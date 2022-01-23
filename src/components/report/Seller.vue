@@ -90,7 +90,8 @@ export default {
     },
 
     async getData() {
-      const { data: res } = await this.$http.get("seller");
+      // const { data: res } = await this.$http.get("seller");
+      const { data: res } = await this.$http.get("seller.json");
       this.allData = res;
 
       //sort all data and separate them in to different page

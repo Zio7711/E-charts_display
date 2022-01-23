@@ -27,8 +27,8 @@ export default {
     async initChart() {
       this.chartInstance = this.$echarts.init(this.$refs.mapRef, this.theme);
 
-      const res = await this.$http.get(`/map/china`);
-      // const res = await axios.get("http://192.168.201.38:9000/map/china.json");
+      // const res = await this.$http.get(`/map/china`);
+      const res = await axios.get("http://localhost:8080/map/china.json");
       this.$echarts.registerMap("china", res.data);
 
       const initOption = {
@@ -82,7 +82,10 @@ export default {
     },
 
     async getData() {
-      const { data: res } = await this.$http.get("map");
+      // const { data: res } = await this.$http.get("map");
+      const { data: res } = await this.$http.get("map.json");
+      // const { data: res } = await axios.get("http://localhost:8080/map.json");
+
       this.allData = res;
 
       this.updateChart();

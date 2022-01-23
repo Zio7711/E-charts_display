@@ -9,7 +9,10 @@ import "./assets/css/global.less";
 
 // SocketService.Instance.connect();
 
-axios.defaults.baseURL = "http://192.168.201.38:9997/api/";
+// axios.defaults.baseURL = "http://192.168.201.38:9997/api/";
+// axios.defaults.baseURL = "http://localhost:8080/";
+axios.defaults.baseURL =
+  "https://e-charts-display-b9knskbjr-zio7711.vercel.app/";
 
 Vue.prototype.$http = axios;
 // Vue.prototype.$socket = SocketService.Instance;

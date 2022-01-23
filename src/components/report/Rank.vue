@@ -83,7 +83,8 @@ export default {
     },
 
     async getData() {
-      const res = await this.$http.get("rank");
+      // const res = await this.$http.get("rank");
+      const res = await this.$http.get("rank.json");
       this.allData = res.data;
       this.allData.sort((a, b) => b.value - a.value);
       this.updateChart();

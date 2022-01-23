@@ -54,7 +54,8 @@ export default {
     },
 
     async getData() {
-      const { data: res } = await this.$http.get("stock");
+      const { data: res } = await this.$http.get("stock.json");
+      // const { data: res } = await this.$http.get("stock");
       this.allData = res;
 
       this.updateChart();
