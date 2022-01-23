@@ -185,18 +185,18 @@ export default {
 
   methods: {
     changeSize(chartName) {
-      // this.fullScreenStatus[chartName] = !this.fullScreenStatus[chartName];
-      // this.$nextTick(() => {
-      //   this.$refs[chartName].screenAdapter();
-      // });
-
-      const targetValue = !this.fullScreenStatus[chartName];
-      this.$socket.send({
-        action: "fullScreen",
-        socketType: "fullScreen",
-        chartName: chartName,
-        value: targetValue,
+      this.fullScreenStatus[chartName] = !this.fullScreenStatus[chartName];
+      this.$nextTick(() => {
+        this.$refs[chartName].screenAdapter();
       });
+
+      // const targetValue = !this.fullScreenStatus[chartName];
+      // this.$socket.send({
+      //   action: "fullScreen",
+      //   socketType: "fullScreen",
+      //   chartName: chartName,
+      //   value: targetValue,
+      // });
     },
 
     recvData(data) {
@@ -212,13 +212,13 @@ export default {
     },
 
     handleChangeTheme() {
-      // this.$store.commit("CHANGETHEME");
-      this.$socket.send({
-        action: "themeChange",
-        socketType: "themeChange",
-        chartName: "",
-        value: "",
-      });
+      this.$store.commit("CHANGETHEME");
+      // this.$socket.send({
+      //   action: "themeChange",
+      //   socketType: "themeChange",
+      //   chartName: "",
+      //   value: "",
+      // });
     },
 
     recvThemeChange() {
@@ -238,14 +238,14 @@ export default {
 
   created() {
     this.currentTime();
-    this.$socket.registerCallBack("fullScreen", this.recvData);
-    this.$socket.registerCallBack("themeChange", this.recvThemeChange);
+    // this.$socket.registerCallBack("fullScreen", this.recvData);
+    // this.$socket.registerCallBack("themeChange", this.recvThemeChange);
   },
 
   destroyed() {
     // 组件销毁时，销毁事件
-    this.$socket.unRegisterCallBack("fullScreen");
-    this.$socket.unRegisterCallBack("themeChange");
+    // this.$socket.unRegisterCallBack("fullScreen");
+    // this.$socket.unRegisterCallBack("themeChange");
     clearInterval(this.timerID);
   },
 };

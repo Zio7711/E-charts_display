@@ -100,8 +100,8 @@ export default {
       this.chartInstance.setOption(initOption);
     },
 
-    getData(res) {
-      // const { data: res } = await this.$http.get("/hotproduct");
+    async getData() {
+      const { data: res } = await this.$http.get("/hotproduct");
 
       this.allData = res;
       this.updateChart();
@@ -185,25 +185,25 @@ export default {
   },
 
   created() {
-    this.$socket.registerCallBack("hotData", this.getData);
+    // this.$socket.registerCallBack("hotData", this.getData);
   },
 
   mounted() {
     this.initChart();
-    // this.getData();
-    this.$socket.send({
-      action: "getData",
-      socketType: "hotData",
-      chartName: "hotproduct",
-      value: "",
-    });
+    this.getData();
+    // this.$socket.send({
+    //   action: "getData",
+    //   socketType: "hotData",
+    //   chartName: "hotproduct",
+    //   value: "",
+    // });
     window.addEventListener("resize", this.screenAdapter);
     this.screenAdapter();
   },
 
   destroyed() {
     window.removeEventListener("resize", this.screenAdapter);
-    this.$socket.unRegisterCallBack("hotData");
+    // this.$socket.unRegisterCallBack("hotData");
   },
 };
 </script>

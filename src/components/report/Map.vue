@@ -27,7 +27,8 @@ export default {
     async initChart() {
       this.chartInstance = this.$echarts.init(this.$refs.mapRef, this.theme);
 
-      const res = await axios.get("http://localhost:8080/map/china.json");
+      const res = await this.$http.get(`/map/china`);
+      // const res = await axios.get("http://192.168.201.38:9000/map/china.json");
       this.$echarts.registerMap("china", res.data);
 
       const initOption = {
@@ -63,6 +64,8 @@ export default {
               "http://localhost:8080" + provinceInfo.path
             );
 
+            // const res = await this.$http.get(`/${provinceInfo.path}`);
+
             this.mapData[provinceInfo.key] = res.data;
             this.$echarts.registerMap(provinceInfo.key, res.data);
           }
@@ -78,8 +81,8 @@ export default {
       });
     },
 
-    getData(res) {
-      // const { data: res } = await this.$http.get("map");
+    async getData() {
+      const { data: res } = await this.$http.get("map");
       this.allData = res;
 
       this.updateChart();
@@ -152,25 +155,25 @@ export default {
   },
 
   created() {
-    this.$socket.registerCallBack("mapData", this.getData);
+    // this.$socket.registerCallBack("mapData", this.getData);
   },
 
   mounted() {
     this.initChart();
-    // this.getData();
-    this.$socket.send({
-      action: "getData",
-      socketType: "mapData",
-      chartName: "map",
-      value: "",
-    });
+    this.getData();
+    // this.$socket.send({
+    //   action: "getData",
+    //   socketType: "mapData",
+    //   chartName: "map",
+    //   value: "",
+    // });
     window.addEventListener("resize", this.screenAdapter);
     this.screenAdapter();
   },
 
   destroyed() {
     window.removeEventListener("resize", this.screenAdapter);
-    this.$socket.unRegisterCallBack("mapData");
+    // this.$socket.unRegisterCallBack("mapData");
   },
 };
 </script>

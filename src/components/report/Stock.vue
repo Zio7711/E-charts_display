@@ -53,8 +53,8 @@ export default {
       });
     },
 
-    getData(res) {
-      // const { data: res } = await this.$http.get("stock");
+    async getData() {
+      const { data: res } = await this.$http.get("stock");
       this.allData = res;
 
       this.updateChart();
@@ -191,18 +191,18 @@ export default {
   },
 
   created() {
-    this.$socket.registerCallBack("stockData", this.getData);
+    // this.$socket.registerCallBack("stockData", this.getData);
   },
 
   mounted() {
     this.initChart();
-    // this.getData();
-    this.$socket.send({
-      action: "getData",
-      socketType: "stockData",
-      chartName: "stock",
-      value: "",
-    });
+    this.getData();
+    // this.$socket.send({
+    //   action: "getData",
+    //   socketType: "stockData",
+    //   chartName: "stock",
+    //   value: "",
+    // });
     window.addEventListener("resize", this.screenAdapter);
     this.screenAdapter();
   },
@@ -211,7 +211,7 @@ export default {
     window.removeEventListener("resize", this.screenAdapter);
     clearInterval(this.timerId);
 
-    this.$socket.unregisterCallBack("stockData");
+    // this.$socket.unregisterCallBack("stockData");
   },
 };
 </script>

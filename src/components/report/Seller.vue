@@ -89,8 +89,8 @@ export default {
       });
     },
 
-    getData(res) {
-      // const { data: ret } = await this.$http.get("seller");
+    async getData() {
+      const { data: res } = await this.$http.get("seller");
       this.allData = res;
 
       //sort all data and separate them in to different page
@@ -177,24 +177,24 @@ export default {
     },
   },
   created() {
-    this.$socket.registerCallBack("sellerData", this.getData);
+    // this.$socket.registerCallBack("sellerData", this.getData);
   },
   mounted() {
     this.initChart();
-    // this.getData();
-    this.$socket.send({
-      action: "getData",
-      socketType: "sellerData",
-      chartName: "seller",
-      value: "",
-    });
+    this.getData();
+    // this.$socket.send({
+    //   action: "getData",
+    //   socketType: "sellerData",
+    //   chartName: "seller",
+    //   value: "",
+    // });
 
     window.addEventListener("resize", this.screenAdapter);
     this.screenAdapter();
   },
 
   beforeDestroy() {
-    this.$$socket.unRegisterCallBack("sellerData");
+    // this.$socket.unRegisterCallBack("sellerData");
     clearInterval(this.timeId);
     window.removeEventListener("resize", this.screenAdapter);
   },

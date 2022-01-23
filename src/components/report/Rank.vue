@@ -82,9 +82,9 @@ export default {
       });
     },
 
-    getData(res) {
-      // const res = await this.$http.get("rank");
-      this.allData = res;
+    async getData() {
+      const res = await this.$http.get("rank");
+      this.allData = res.data;
       this.allData.sort((a, b) => b.value - a.value);
       this.updateChart();
       this.startInterval();
@@ -177,25 +177,25 @@ export default {
   },
 
   created() {
-    this.$socket.registerCallBack("rankData", this.getData);
+    // this.$socket.registerCallBack("rankData", this.getData);
   },
 
   mounted() {
     this.initChart();
-    // this.getData();
-    this.$socket.send({
-      action: "getData",
-      socketType: "rankData",
-      chartName: "rank",
-      value: "",
-    });
+    this.getData();
+    // this.$socket.send({
+    //   action: "getData",
+    //   socketType: "rankData",
+    //   chartName: "rank",
+    //   value: "",
+    // });
     window.addEventListener("resize", this.screenAdapter);
     this.screenAdapter();
   },
 
   destroyed() {
     window.removeEventListener("resize", this.screenAdapter);
-    this.$socket.unRegisterCallBack("rankData");
+    // this.$socket.unRegisterCallBack("rankData");
     clearInterval(this.timerId);
   },
 };
