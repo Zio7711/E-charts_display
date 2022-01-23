@@ -373,4 +373,51 @@ export default {
     font-size: 22px;
   }
 }
+
+@media (min-width: 320px) and (max-width: 760px) {
+  .screen-container {
+    overflow: auto;
+  }
+  .screen-body {
+    display: flex;
+    flex-direction: column;
+    height: fit-content;
+    .screen-left {
+      width: 100%;
+      #left-top {
+        height: 400px;
+      }
+
+      #left-bottom {
+        height: 400px;
+      }
+    }
+
+    .screen-middle {
+      width: 100%;
+      margin: 0;
+      margin-top: 25px;
+      margin-bottom: 25px;
+      #middle-top {
+        height: 400px;
+      }
+
+      #middle-bottom {
+        height: 400px;
+      }
+    }
+
+    .screen-right {
+      width: 100%;
+
+      #right-top {
+        height: 400px;
+      }
+
+      #right-bottom {
+        height: 400px;
+      }
+    }
+  }
+}
 </style>
